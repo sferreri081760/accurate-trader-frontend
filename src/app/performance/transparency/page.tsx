@@ -37,7 +37,7 @@ export default function PerformanceTransparencyPage() {
                 </svg>
               </div>
               <a 
-                href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE"
+                href="https://www.youtube.com/watch?v=EaRr14UBJY0"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-8 py-4 bg-red-600 text-white text-lg font-medium rounded-lg hover:bg-red-700 transition-colors shadow-lg"
