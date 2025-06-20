@@ -59,7 +59,115 @@ src/
 - Node.js 18+ 
 - npm or yarn
 
+
 ### **Installation**
+
+- Python 3.9+ (for backend development)
+
+### **Frontend Development**
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+Frontend will be available at: http://localhost:3000
+
+### **Backend Development**
+```bash
+# Navigate to backend directory and start server
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+
+Before running the backend, create a `.env` file in the backend directory with:
+```
+JWT_SECRET=your_jwt_secret
+FLASK_ENV=development
+ADMIN_PASSWORD=your_admin_password
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+```
+
+Backend will be available at: http://localhost:5000
+
+## 💻 **Development Mode**
+
+### **Running Both Servers**
+You'll need to run both the frontend and backend servers for local development:
+
+1. **Start Backend Server** (in one terminal):
+```bash
+cd backend
+venv\Scripts\activate
+python app.py
+```
+
+2. **Start Frontend Server** (in another terminal):
+```bash
+cd frontend
+npm run dev
+```
+
+### **Development Features**
+- Frontend hot-reloading at http://localhost:3000
+- Backend API at http://localhost:5000
+- CORS is configured for local development
+- Environment variables are loaded from `.env` file
+- Debug mode is enabled for both servers
+
+### **Making Changes**
+- Frontend changes will automatically reload
+- Backend changes require server restart
+- Check browser console and terminal for errors
+- API endpoints are available at http://localhost:5000/api/*
+
+### **Troubleshooting**
+
+#### **Common Issues**
+
+1. **Stripe Module Error**
+   If you see `ModuleNotFoundError: No module named 'stripe.billing'`:
+   ```bash
+   # The current version (11.1.0) has breaking changes
+   # Downgrade to a stable version
+   pip uninstall stripe
+   pip install stripe==7.11.0
+   ```
+
+2. **Virtual Environment Issues**
+   If you get command not found errors:
+   ```bash
+   # Remove existing venv
+   rmdir /s /q venv
+   # Create new venv
+   python -m venv venv
+   venv\Scripts\activate
+   # Reinstall dependencies
+   pip install -r requirements.txt
+   pip install stripe==7.11.0  # Override the newer version
+   ```
+
+3. **Port Already in Use**
+   If you see "Address already in use":
+   ```bash
+   # Find process using port 5000
+   netstat -ano | findstr :5000
+   # Kill the process (replace PID with the number from above)
+   taskkill /PID <PID> /F
+   ```
+
+### **Installation (Full Setup)**
+
 
 1. **Clone the repository:**
    ```bash
@@ -232,4 +340,8 @@ This project is proprietary software for Accurate Trader platform.
 
 ---
 
+<<<<<<< HEAD
 **Built with ❤️ for professional traders** 
+=======
+**Built with ❤️ for professional traders** 
+>>>>>>> 7d98f606bf70f314fdd6f2ddd27745f386a080f0
