@@ -2,30 +2,39 @@
 // This handles both development (localhost) and production (deployed) scenarios
 
 const getApiUrl = (): string => {
-  // Check if we're in a browser environment
+  // First priority: explicit environment variable
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // Second priority: runtime environment detection
   if (typeof window !== 'undefined') {
     const isDevelopment = window.location.hostname === 'localhost' || 
-                         window.location.hostname === '127.0.0.1';
+                         window.location.hostname === '127.0.0.1' ||
+                         window.location.hostname === '0.0.0.0';
     
     if (isDevelopment) {
       return 'http://localhost:5000';
     }
-    
-    // For production deployment - use deployed backend URL
-    return 'https://trading-signals-backend-q0ks.onrender.com';
   }
   
-  // Server-side rendering fallback - default to production URL
-  return process.env.NEXT_PUBLIC_API_URL || 'https://trading-signals-backend-q0ks.onrender.com';
+  // Default: production backend URL
+  return 'https://trading-signals-backend-q0ks.onrender.com';
 };
 
 export const API_BASE_URL = getApiUrl();
+
+// Debug log to verify which API URL is being used
+if (typeof window !== 'undefined') {
+  console.log('API_BASE_URL:', API_BASE_URL);
+}
 
 // Helper function to determine if we're in development mode
 export const isDevelopmentMode = (): boolean => {
   if (typeof window !== 'undefined') {
     return window.location.hostname === 'localhost' || 
-           window.location.hostname === '127.0.0.1';
+           window.location.hostname === '127.0.0.1' ||
+           window.location.hostname === '0.0.0.0';
   }
   return process.env.NODE_ENV === 'development';
 };

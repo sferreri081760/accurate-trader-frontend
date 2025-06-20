@@ -161,7 +161,7 @@ export default function StrategiesPage() {
           <div className="text-center py-12 bg-blue-50 rounded-lg">
             <p className="text-gray-600">No strategies found. Please make sure the backend server is running.</p>
             <p className="text-gray-500 mt-2 text-sm">
-              Backend should be running at: http://localhost:5000
+              Backend URL: {buildApiUrl('/api/strategies')}
             </p>
           </div>
         )}
