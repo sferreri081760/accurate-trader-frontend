@@ -54,6 +54,7 @@ export default function PerformancePage() {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [cacheKey, setCacheKey] = useState<string>(Date.now().toString()); // Use proven pattern
 
   const [windowWidth, setWindowWidth] = useState(800); // Default width
 
@@ -193,7 +194,7 @@ export default function PerformancePage() {
       setError(null);
       
       try {
-        const response = await fetch(buildApiUrl('/api/performance/data'), {
+        const response = await fetch(`${buildApiUrl('/api/performance/data')}?v=${cacheKey}`, {
           credentials: 'include',
           cache: 'no-store'
         });
@@ -234,49 +235,11 @@ export default function PerformancePage() {
     };
 
     fetchDataWrapper();
-  }, [strategyName]);
+  }, [strategyName, cacheKey]); // Use cacheKey like working strategy charts
 
-  const refreshData = async () => {
-    if (!strategyName) return;
-    
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const response = await fetch(buildApiUrl('/api/performance/data'), {
-        credentials: 'include',
-        cache: 'no-store'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch performance data: ${response.status}`);
-      }
-      
-      const allData: PerformanceData = await response.json();
-      const strategyData = allData[strategyName];
-      
-      if (!strategyData || !Array.isArray(strategyData)) {
-        throw new Error(`No performance data found for strategy: ${strategyName}`);
-      }
-      
-      const formattedData = strategyData.map((item) => ({
-        ...item,
-        formattedDate: new Date(item.date).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        })
-      }));
-      
-      setChartData(formattedData);
-      toast.success('Performance data refreshed successfully!');
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to refresh performance data';
-      setError(errorMessage);
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  const refreshData = () => {
+    setCacheKey(Date.now().toString()); // Copy exact working pattern
+    toast.success('Charts refreshed!');
   };
 
   const formatTitle = (strategy: string) => {
