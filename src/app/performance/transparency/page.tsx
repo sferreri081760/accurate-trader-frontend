@@ -47,10 +47,7 @@ export default function PerformanceTransparencyPage() {
                 </svg>
                 Watch Transparency Video on YouTube
               </a>
-              <p className="text-gray-400 text-sm mt-4">
-                Click to view our complete data processing pipeline demonstration
-              </p>
-              <p className="text-gray-400 text-xs mt-2 italic">
+              <p className="text-gray-400 text-xs mt-4 italic">
                 For best video quality, click the gear icon to 1080p, or highest setting available
               </p>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface TextSlide {
   type: 'text';
@@ -142,12 +143,14 @@ const HeroSlideshow = () => {
           ) : (
             // Image-based slides
             <div className="relative w-full h-full overflow-hidden" style={{ clipPath: 'inset(0 0 113px 0)' }}>
-              <img
+              <Image
                 src={slide.src}
                 alt={slide.alt}
-                className="absolute inset-0 w-full h-full object-cover"
+                fill
+                className="object-cover"
                 style={{ objectPosition: 'center center' }}
-                loading={index <= 2 ? "eager" : "lazy"}
+                priority={index <= 2}
+                sizes="100vw"
               />
               {/* Lighter overlay for repositioned text slides to maintain chart visibility */}
               <div className={`absolute inset-0 ${
@@ -157,15 +160,17 @@ const HeroSlideshow = () => {
               {/* Slide content overlay with dynamic positioning */}
               <div className={
                 slide.src === '/images/CCEP CWH dblbot for Gamma P.png'
-                  ? 'absolute bottom-[460px] left-48 flex justify-start px-6'
+                  ? 'absolute bottom-[460px] left-[116px] flex justify-start px-6'
                   : slide.src === '/images/SPY 0526P.png'
-                  ? 'absolute top-40 right-40 flex justify-end'
+                  ? 'absolute top-[122px] right-40 flex justify-end'
                   : slide.src === '/images/SMCI W2 0124P.png'
-                  ? 'absolute top-46 left-8 flex justify-start'
+                  ? 'absolute top-[108px] left-8 flex justify-start'
                   : slide.src === '/images/AMT CWH for Gamma .png'
-                  ? 'absolute bottom-[188px] left-0 right-0 flex justify-center px-6'
+                  ? 'absolute bottom-[207px] left-0 right-0 flex justify-center px-6'
                   : slide.src === '/images/PSTG TH 907 Multiple signals.jpg'
-                  ? 'absolute bottom-[470px] left-0 right-0 flex justify-center px-6'
+                  ? 'absolute bottom-[451px] left-0 right-0 flex justify-center px-6'
+                  : slide.src === '/images/3_Real-World-Trading-Success.png'
+                  ? 'absolute top-[69px] left-0 right-0 flex justify-center px-6'
                   : getTextPositionClasses(slide.textPosition)
               }>
                 <div className="text-center max-w-4xl">
