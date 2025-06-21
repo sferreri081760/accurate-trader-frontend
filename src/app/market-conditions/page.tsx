@@ -5,14 +5,20 @@ import Header from '@/components/Header';
 import Link from 'next/link';
 import Image from 'next/image';
 import { buildFileUrl } from '@/config/api';
+import { toast } from 'react-hot-toast';
 
 export default function MarketConditionsPage() {
   const [cacheKey, setCacheKey] = useState<string>(Date.now().toString());
   const [availableCharts, setAvailableCharts] = useState<(string | null)[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refreshCharts = () => {
+    setIsRefreshing(true);
     setCacheKey(Date.now().toString());
     checkAvailableCharts();
+    toast.success('Charts refreshed!');
+    // Reset loading after a short delay
+    setTimeout(() => setIsRefreshing(false), 500);
   };
 
   const checkAvailableCharts = useCallback(async () => {
@@ -66,12 +72,13 @@ export default function MarketConditionsPage() {
           <div className="mt-6">
             <button
               onClick={refreshCharts}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              disabled={isRefreshing}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              Refresh Charts
+              {isRefreshing ? 'Refreshing...' : 'Refresh Charts'}
             </button>
           </div>
         </div>
