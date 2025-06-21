@@ -236,10 +236,47 @@ export default function PerformancePage() {
     fetchDataWrapper();
   }, [strategyName]);
 
-  const refreshData = () => {
-    // Trigger re-fetch by updating a dependency
-    setChartData([]);
-    toast.success('Performance data refreshed!');
+  const refreshData = async () => {
+    if (!strategyName) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(buildApiUrl('/api/performance/data'), {
+        credentials: 'include',
+        cache: 'no-store'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch performance data: ${response.status}`);
+      }
+      
+      const allData: PerformanceData = await response.json();
+      const strategyData = allData[strategyName];
+      
+      if (!strategyData || !Array.isArray(strategyData)) {
+        throw new Error(`No performance data found for strategy: ${strategyName}`);
+      }
+      
+      const formattedData = strategyData.map((item) => ({
+        ...item,
+        formattedDate: new Date(item.date).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: '2-digit'
+        })
+      }));
+      
+      setChartData(formattedData);
+      toast.success('Performance data refreshed successfully!');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to refresh performance data';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formatTitle = (strategy: string) => {
