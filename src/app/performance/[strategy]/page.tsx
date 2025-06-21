@@ -264,7 +264,7 @@ export default function PerformancePage() {
         formattedDate: new Date(item.date).toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
-          year: '2-digit'
+          year: 'numeric'
         })
       }));
       
